@@ -14,8 +14,6 @@ $clipsFullPath = LBPDATADIR ."/". $clipsDir;
 
 echo $clipsFullPath;
 
-
-
 // Alle MP3-Dateien im Clips-Ordner finden
 $clips = glob($clipsFullPath."/*.mp3");
 
