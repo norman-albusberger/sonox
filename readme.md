@@ -1,4 +1,8 @@
 # SonoX - Plugin for Loxberry
+<p align="center">
+  <img src="https://raw.githubusercontent.com/norman-albusberger/sonox/refs/heads/main/icons/icon_256.png" alt="Sonox Icon" width="256">
+</p>
+
 
 SonoX integrates Sonos (especially the S1 version.) speakers with your Loxone Smart Home system, leveraging the [node-sonos-http-api](https://github.com/jishi/node-sonos-http-api) for seamless control and automation.
 Since other plugins are way too complicated and unstable I decided to create my own one. 
