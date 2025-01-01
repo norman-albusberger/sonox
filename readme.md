@@ -1,7 +1,7 @@
-# Sonox Plugin for Loxberry
+# SonoX - Plugin for Loxberry
 
-Sonox integrates Sonos (especially the S1 version.) speakers with your Loxone Smart Home system, leveraging the [node-sonos-http-api](https://github.com/jishi/node-sonos-http-api) for seamless control and automation.
-
+SonoX integrates Sonos (especially the S1 version.) speakers with your Loxone Smart Home system, leveraging the [node-sonos-http-api](https://github.com/jishi/node-sonos-http-api) for seamless control and automation.
+Since other plugins are way too complicated and unstable I decided to create my own one. 
 
 ## Features
 - **Playback Control**: Play, pause, skip, and adjust volume.
