@@ -1,0 +1,24 @@
+{
+  "port": 5005,
+  "webroot": "/opt/loxberry/data/plugins/sonox",
+  "cacheDir": "cache",
+  "clipsDir": "clips",
+  "tts": {
+    "enabled": true,
+    "language": "en-gb",
+    "cache": true,
+    "defaultVolume": 20,
+    "googleApiKey": ""
+  },
+  "spotify": {
+    "enabled": true,
+    "clientId": "",
+    "clientSecret": ""
+  },
+  "presetDir": "presets",
+  "webroot": "static",
+  "sonos": {
+    "searchTimeout": 5000,
+    "pollingInterval": 60000
+  }
+}

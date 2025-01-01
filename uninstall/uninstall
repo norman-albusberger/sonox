@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Umgebungsvariablen
+API_DIR="$LBPBIN/sonox/node-sonos-http-api"
+SERVICE_FILE="/etc/systemd/system/sonos-http-api.service"
+
+echo "Starte die Deinstallation von Sonox..."
+
+# Sonos HTTP API Dienst stoppen und entfernen
+if [ -f "$SERVICE_FILE" ]; then
+    echo "Beende den Sonos HTTP API Dienst..."
+    sudo systemctl stop sonos-http-api.service
+    sudo systemctl disable sonos-http-api.service
+    echo "Entferne den Dienst..."
+    sudo rm -f "$SERVICE_FILE"
+    sudo systemctl daemon-reload
+else
+    echo "Sonos HTTP API Dienst nicht gefunden, überspringe."
+fi
+
+# Logs und Daten bereinigen (optional)
+LOG_DIR="$LBPLOG/sonox"
+DATA_DIR="$LBPDATA/sonox"
+echo "Optionale Bereinigung von Plugin-Logs und Daten..."
+if [ -d "$LOG_DIR" ]; then
+    sudo rm -rf "$LOG_DIR"
+    echo "Logs entfernt."
+else
+    echo "Log-Verzeichnis nicht gefunden."
+fi
+
+if [ -d "$DATA_DIR" ]; then
+    sudo rm -rf "$DATA_DIR"
+    echo "Daten entfernt."
+else
+    echo "Datenverzeichnis nicht gefunden."
+fi
+
+echo "Deinstallation abgeschlossen."
+exit 0
