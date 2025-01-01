@@ -1,4 +1,5 @@
 # SonoX - Plugin for Loxberry
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/norman-albusberger/sonox/refs/heads/main/icons/icon_256.png" alt="Sonox Icon" width="256">
 </p>
