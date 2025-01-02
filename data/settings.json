@@ -16,7 +16,6 @@
     "clientSecret": ""
   },
   "presetDir": "presets",
-  "webroot": "static",
   "sonos": {
     "searchTimeout": 5000,
     "pollingInterval": 60000
