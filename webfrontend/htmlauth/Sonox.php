@@ -51,7 +51,8 @@ class Sonox
                 "/zones" => $L['ENDPOINTS.LIST_ZONES'],
                 "/pauseall" => $L['ENDPOINTS.PAUSE_ALL'],
                 "/resumeall" => $L['ENDPOINTS.RESUME_ALL'],
-                "/reindex" => $L['ENDPOINTS.REINDEX_LIBRARY']
+                "/reindex" => $L['ENDPOINTS.REINDEX_LIBRARY'],
+                "/favorites" => $L['ENDPOINTS.FAVORITES']
             ],
             $L['ENDPOINTS.ROOM_ACTIONS'] => [
                 "/{room}/volume/{volume}" => $L['ENDPOINTS.SET_VOLUME'],
@@ -100,7 +101,8 @@ class Sonox
             ],
             $L['ENDPOINTS.CLIPS'] => [
                 "/{room}/clip/{clip}/{announceVolume}" => $L['ENDPOINTS.PLAY_CLIP'],
-                "/clipall/{clip}/{announceVolume}" => $L['ENDPOINTS.PLAY_CLIP_ALL']
+                "/clipall/{clip}/{announceVolume}" => $L['ENDPOINTS.PLAY_CLIP_ALL'],
+                "/clipavailable/{clip}/{announceVolume}" => $L['ENDPOINTS.PLAY_CLIP_AVAILABLE']
             ]
         ];
     }

@@ -5,17 +5,17 @@ API_DIR="$LBPBIN/sonox/node-sonos-http-api"
 SERVICE_FILE="/etc/systemd/system/sonos-http-api.service"
 SETTINGS_FILE="$LBPDATA/sonox/settings.json"
 
-echo "<INFO> Starte die Einrichtung des Systemd-Dienstes für die Sonos-API..."
+echo "<INFO> Starting the setup of systemd service for the API..."
 
 # Prüfen, ob das API-Verzeichnis existiert
 if [ ! -d "$API_DIR" ]; then
-    echo "<ERROR> API-Verzeichnis $API_DIR existiert nicht. Kann Systemd-Dienst nicht erstellen."
+    echo "<ERROR> API dir does not exist $API_DIR. Cannot create service. Please try reinstall."
     exit 1
 fi
 
 # Systemd-Dienst einrichten
 if [ ! -f "$SERVICE_FILE" ]; then
-    echo "<INFO> Erstelle Systemd-Dienst für node-sonos-http-api..."
+    echo "<INFO> Creating systemd service for node-sonos-http-api..."
     cat <<EOF > "$SERVICE_FILE"
 [Unit]
 Description=Sonos HTTP API
@@ -36,14 +36,14 @@ EOF
     systemctl enable sonos-http-api.service
     systemctl start sonos-http-api.service
     if [ $? -eq 0 ]; then
-        echo "<OK> Systemd-Dienst erfolgreich eingerichtet und gestartet."
+        echo "<OK> systemd service created successfully. sonos-http-api.service up and running."
     else
-        echo "<ERROR> Fehler beim Einrichten oder Starten des Systemd-Dienstes."
+        echo "<ERROR> Error during creation and starting of the sonos-http-api.service."
         exit 1
     fi
 else
-    echo "<WARNING> Systemd-Dienst existiert bereits. Überspringe diesen Schritt."
+    echo "<WARNING> systemd service sonos-http-api.service already exists."
 fi
 
-echo "<OK> postinstall.sh erfolgreich abgeschlossen."
+echo "<OK> postinstall.sh finished successfully."
 exit 0
