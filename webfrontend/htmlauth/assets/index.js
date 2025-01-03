@@ -62,14 +62,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 const fullUrl = buildApiUrl(this);
                 fetch(fullUrl)
                     .then(response => {
-                        if (!response.ok) throw new Error(`HTTP-Fehler: ${response.status}`);
+                        if (!response.ok) throw new Error(`HTTP-Error: ${response.status}`);
                         return response.json();
                     })
                     .then(data => {
                         responseBox.textContent = JSON.stringify(data, null, 2);
                     })
                     .catch(error => {
-                        responseBox.textContent = `Fehler: ${error.message}`;
+                        responseBox.textContent = `Error: ${error.message}`;
                     });
             } catch (error) {
                 console.error(error.message);
