@@ -12,27 +12,6 @@
     background-color: #f4f4f4;
 }
 
-.accordion {
-    margin: 20px 0;
-}
-
-.accordion-section {
-    margin-bottom: 10px;
-}
-
-.accordion-header {
-    background: #ddd;
-    padding: 10px;
-    cursor: pointer;
-}
-
-.accordion-content {
-    display: none;
-    padding: 10px;
-    background: #f9f9f9;
-    border: 1px solid #ddd;
-}
-
 .response-box {
     position: fixed;
     bottom: 0;

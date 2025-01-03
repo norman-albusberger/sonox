@@ -17,8 +17,6 @@ echo $clipsFullPath;
 // Alle MP3-Dateien im Clips-Ordner finden
 $clips = glob($clipsFullPath . "/*.mp3");
 
-var_dump($clips);
-
 if (!$clips) {
     $clips = []; // Falls keine Dateien vorhanden sind
 }
@@ -46,10 +44,9 @@ $index = 0;
 </script>
 
 
-<h2>SonoX Virtual Outputs Actions</h2>
-<p><?php echo $L['ENDPOINT.TEST_DESCRIPTION']; ?></p>
+<h1>SonoX Virtual Outputs Actions</h1>
+<h2><?php echo $L['ENDPOINTS.TEST_DESCRIPTION']; ?></h2>
 
-<div class="accordion">
     <?php foreach ($sonox->getEndpoints() as $category => $actions): ?>
 
         <div data-role="collapsible"
@@ -69,9 +66,6 @@ $index = 0;
 
             <table style="width: 100%" class="api-list">
                 <thead>
-                <tr>
-                    <th colspan="2">API-URL mit Input fields for parameter</th>
-                </tr>
                 </thead>
                 <tbody>
                 <?php
