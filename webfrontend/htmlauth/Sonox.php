@@ -51,11 +51,13 @@ class Sonox
                 "/zones" => $L['ENDPOINTS.LIST_ZONES'],
                 "/pauseall" => $L['ENDPOINTS.PAUSE_ALL'],
                 "/resumeall" => $L['ENDPOINTS.RESUME_ALL'],
-                "/reindex" => $L['ENDPOINTS.REINDEX_LIBRARY'],
+                //"/reindex" => $L['ENDPOINTS.REINDEX_LIBRARY'],
+                "/preset/{preset}" => $L['ENDPOINTS.PRESET'],
                 "/favorites" => $L['ENDPOINTS.FAVORITES']
             ],
             $L['ENDPOINTS.ROOM_ACTIONS'] => [
                 "/{room}/volume/{volume}" => $L['ENDPOINTS.SET_VOLUME'],
+                "/{room}/groupvolume/{volume}" => $L['ENDPOINTS.SET_GROUP_VOLUME'],
                 "/{room}/play" => $L['ENDPOINTS.PLAY_ROOM'],
                 "/{room}/pause" => $L['ENDPOINTS.PAUSE_ROOM'],
                 "/{room}/playpause" => $L['ENDPOINTS.TOGGLE_PLAY_PAUSE'],
@@ -77,28 +79,28 @@ class Sonox
                 "/{room}/say/{phrase}/{language}/{announceVolume}" => $L['ENDPOINTS.TTS_ROOM'],
                 "/sayall/{phrase}/{language}/{announceVolume}" => $L['ENDPOINTS.TTS_ALL']
             ],
-            $L['ENDPOINTS.STREAMING_SERVICES'] => [
-                // Spotify
-                "/{room}/spotify/now/{spotifyURI}" => $L['ENDPOINTS.SPOTIFY_NOW'],
-                "/{room}/spotify/next/{spotifyURI}" => $L['ENDPOINTS.SPOTIFY_NEXT'],
-                "/{room}/spotify/queue/{spotifyURI}" => $L['ENDPOINTS.SPOTIFY_QUEUE'],
+            /*  $L['ENDPOINTS.STREAMING_SERVICES'] => [
+                  // Spotify
+                  "/{room}/spotify/now/{spotifyURI}" => $L['ENDPOINTS.SPOTIFY_NOW'],
+                  "/{room}/spotify/next/{spotifyURI}" => $L['ENDPOINTS.SPOTIFY_NEXT'],
+                  "/{room}/spotify/queue/{spotifyURI}" => $L['ENDPOINTS.SPOTIFY_QUEUE'],
 
-                // Apple Music
-                "/{room}/applemusic/now/song:{songID}" => $L['ENDPOINTS.APPLEMUSIC_SONG_NOW'],
-                "/{room}/applemusic/next/song:{songID}" => $L['ENDPOINTS.APPLEMUSIC_SONG_NEXT'],
-                "/{room}/applemusic/queue/song:{songID}" => $L['ENDPOINTS.APPLEMUSIC_SONG_QUEUE'],
-                "/{room}/applemusic/now/album:{albumID}" => $L['ENDPOINTS.APPLEMUSIC_ALBUM_NOW'],
-                "/{room}/applemusic/next/album:{albumID}" => $L['ENDPOINTS.APPLEMUSIC_ALBUM_NEXT'],
-                "/{room}/applemusic/queue/album:{albumID}" => $L['ENDPOINTS.APPLEMUSIC_ALBUM_QUEUE'],
+                  // Apple Music
+                  "/{room}/applemusic/now/song:{songID}" => $L['ENDPOINTS.APPLEMUSIC_SONG_NOW'],
+                  "/{room}/applemusic/next/song:{songID}" => $L['ENDPOINTS.APPLEMUSIC_SONG_NEXT'],
+                  "/{room}/applemusic/queue/song:{songID}" => $L['ENDPOINTS.APPLEMUSIC_SONG_QUEUE'],
+                  "/{room}/applemusic/now/album:{albumID}" => $L['ENDPOINTS.APPLEMUSIC_ALBUM_NOW'],
+                  "/{room}/applemusic/next/album:{albumID}" => $L['ENDPOINTS.APPLEMUSIC_ALBUM_NEXT'],
+                  "/{room}/applemusic/queue/album:{albumID}" => $L['ENDPOINTS.APPLEMUSIC_ALBUM_QUEUE'],
 
-                // Amazon Music
-                "/{room}/amazonmusic/now/song:{songID}" => $L['ENDPOINTS.AMAZONMUSIC_SONG_NOW'],
-                "/{room}/amazonmusic/next/song:{songID}" => $L['ENDPOINTS.AMAZONMUSIC_SONG_NEXT'],
-                "/{room}/amazonmusic/queue/song:{songID}" => $L['ENDPOINTS.AMAZONMUSIC_SONG_QUEUE'],
-                "/{room}/amazonmusic/now/album:{albumID}" => $L['ENDPOINTS.AMAZONMUSIC_ALBUM_NOW'],
-                "/{room}/amazonmusic/next/album:{albumID}" => $L['ENDPOINTS.AMAZONMUSIC_ALBUM_NEXT'],
-                "/{room}/amazonmusic/queue/album:{albumID}" => $L['ENDPOINTS.AMAZONMUSIC_ALBUM_QUEUE']
-            ],
+                  // Amazon Music
+                  "/{room}/amazonmusic/now/song:{songID}" => $L['ENDPOINTS.AMAZONMUSIC_SONG_NOW'],
+                  "/{room}/amazonmusic/next/song:{songID}" => $L['ENDPOINTS.AMAZONMUSIC_SONG_NEXT'],
+                  "/{room}/amazonmusic/queue/song:{songID}" => $L['ENDPOINTS.AMAZONMUSIC_SONG_QUEUE'],
+                  "/{room}/amazonmusic/now/album:{albumID}" => $L['ENDPOINTS.AMAZONMUSIC_ALBUM_NOW'],
+                  "/{room}/amazonmusic/next/album:{albumID}" => $L['ENDPOINTS.AMAZONMUSIC_ALBUM_NEXT'],
+                  "/{room}/amazonmusic/queue/album:{albumID}" => $L['ENDPOINTS.AMAZONMUSIC_ALBUM_QUEUE']
+              ],*/
             $L['ENDPOINTS.CLIPS'] => [
                 "/{room}/clip/{clip}/{announceVolume}" => $L['ENDPOINTS.PLAY_CLIP'],
                 "/clipall/{clip}/{announceVolume}" => $L['ENDPOINTS.PLAY_CLIP_ALL'],
