@@ -96,8 +96,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 responseContent.textContent = `Error: ${error.message}`;
                 console.error("Fehler:", error.message);
 
-                // Modal auch bei Fehler öffnen
-                modalTrigger.click();
             }
         });
     });
