@@ -1,4 +1,4 @@
-SonoX - The Loxberry Plugin
+SonoX - The Loxberry Plugin [![PayPal donate button](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/paypalme/normanalbusberger "Donate to SonoX using Paypal") 
 -----------------------------
 ***Seamlessly integrate and control your Sonos speakers with Loxone.***
 
