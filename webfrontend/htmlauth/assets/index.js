@@ -1,18 +1,26 @@
 document.addEventListener("DOMContentLoaded", function () {
     const apiBaseUrl = `${sonoxData.apiUrl}:${sonoxData.apiPort}`;
     const responseBox = document.getElementById("response-box");
-    const playerSelects = document.querySelectorAll('[data-select="param-room"]');
+    const playerSelects = document.querySelectorAll('[data-select="param-room"], [data-select="param-roomName"]');
+
     var zones = [];
+    let isLoadingZones = false;
 
     // Funktion, um die Zonen-Daten zu laden
     async function loadZones() {
+        if (isLoadingZones) return; // Verhindert parallele Aufrufe
+        isLoadingZones = true;
         try {
             const response = await fetch(`${apiBaseUrl}/zones`);
             zones = await response.json();
         } catch (err) {
             console.error("Fehler beim Laden der Zonen-Daten:", err);
+        } finally {
+            isLoadingZones = false;
         }
+
     }
+
 
 
     // Funktion zum Bauen der URL
@@ -23,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const placeholders = [
             {key: "{room}", id: `param-room-${index}`},
+            {key: "{roomName}", id: `param-roomName-${index}`},
             {key: "{name}", id: `param-name-${index}`},
             {key: "{value}", id: `param-value-${index}`},
             {key: "{preset}", id: `param-json-${index}`},
@@ -61,7 +70,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // API-Test-Button
     document.querySelectorAll(".test-btn").forEach(button => {
         button.addEventListener("click", async () => {
-            responseBox.textContent = "Loading...";
+            // Setze eine "Lade"-Nachricht ins Modal
+            const responseContent = document.getElementById("apiResponseContent");
+            responseContent.textContent = "Loading...";
+
             try {
                 const fullUrl = buildApiUrl(button);
 
@@ -73,17 +85,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // Daten der API abholen
                 const data = await response.json();
-                responseBox.textContent = JSON.stringify(data, null, 2);
+                responseContent.textContent = JSON.stringify(data, null, 2);
+
+                // Modal öffnen
+                $("#apiResponseModal").popup("open",{transition: "fade"});
 
                 // Zonen aktualisieren und anschließend die Übersicht aktualisieren
-                await loadZones();
-                updatePlayerOverview();
+                await updatePlayerOverview();
             } catch (error) {
-                responseBox.textContent = `Error: ${error.message}`;
+                responseContent.textContent = `Error: ${error.message}`;
                 console.error("Fehler:", error.message);
+
+                // Modal auch bei Fehler öffnen
+                modalTrigger.click();
             }
         });
     });
+
 
     // Funktion zum Aktualisieren der Player-Übersicht
     /* function updatePlayerOverview() {
@@ -122,7 +140,9 @@ document.addEventListener("DOMContentLoaded", function () {
          });
      } */
 
-    function updatePlayerOverview() {
+    async function updatePlayerOverview() {
+        await loadZones();
+        console.log(isLoadingZones);
         const tableBody = document.querySelector("#player-overview-table tbody");
         tableBody.innerHTML = ""; // Tabelle leeren
 
@@ -159,7 +179,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <td>${state.currentTrack.album || "N/A"}</td>
                 <td>${state.currentTrack.stationName || "N/A"}</td>
                 <td>${state.playbackState}</td>
-                <td>${state.volume}</td>
+                <td>${state.volume}%</td>
                 <td>${state.mute ? "X" : ""}</td>
                 <td>
                     Bass: ${state.equalizer.bass}, 
@@ -260,19 +280,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Hauptfunktion
-    async function initialize() {
-        await loadZones(); // Zonen-Daten laden
-        if (Array.isArray(zones) && zones.length > 0) {
-            updatePlayerOverview(); // Tabelle aktualisieren
-            populatePresetTextarea(); // Textareas befüllen
-            populatePlayerSelects();
-        } else {
-            console.warn("Keine Zonen-Daten gefunden.");
-        }
+   async function initialize() {
+
+       await updatePlayerOverview(); // Tabelle aktualisieren
+        populatePresetTextarea(); // Textareas befüllen
+        populatePlayerSelects();
+
     }
 
-    // Initialisierung starten
-    initialize();
+    (async () => {
+        await initialize();
+    })();
 
 
 });

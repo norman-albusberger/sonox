@@ -3,6 +3,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 $L = LBSystem::readlanguage("language.ini");
+
 class Sonox
 {
     private string $settingsPath;
@@ -69,6 +70,16 @@ class Sonox
                 "/{room}/state" => $L['ENDPOINTS.GET_STATE'],
                 "/{room}/sleep/{timeout}" => $L['ENDPOINTS.SET_SLEEP_TIMER']
             ],
+
+            $L['ENDPOINTS.GROUP_ACTIONS'] => [
+                "/{room}/add/{roomName}" => $L['ENDPOINTS.ADD_TO_GROUP'], // Adds the specified room ({roomName}) to the group of the room ({room}).
+                "/{room}/isolate" => $L['ENDPOINTS.ISOLATE_PLAYER'], // Isolates the specified room ({room}), making it a standalone player.
+                "/{room}/ungroup" => $L['ENDPOINTS.UNGROUP_PLAYER'], // Ungroups the specified room ({room}), alias for isolate.
+                "/{room}/leave" => $L['ENDPOINTS.LEAVE_GROUP'], // Makes the specified room ({room}) leave its current group, alias for isolate.
+                "/{room}/join/{roomName}" => $L['ENDPOINTS.JOIN_GROUP'] // Makes the specified room ({room}) join the group of another room ({roomName}).
+            ],
+
+
             $L['ENDPOINTS.PLAYLIST_ACTIONS'] => [
                 "/{room}/favorite/{name}" => $L['ENDPOINTS.PLAY_FAVORITE'],
                 "/{room}/playlist/{name}" => $L['ENDPOINTS.PLAY_PLAYLIST'],

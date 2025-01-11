@@ -51,19 +51,6 @@
     margin-top: 10px;
 }
 
-.test-btn, .copy-btn {
-    padding: 5px 10px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    border-radius: 3px;
-    font-size: 14px;
-}
-
-.test-btn:hover, .copy-btn:hover {
-    background-color: #0056b3;
-}
 
 .input-group {
     margin-bottom: 10px;

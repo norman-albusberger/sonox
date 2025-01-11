@@ -5,7 +5,7 @@ require_once "Sonox.php";
 
 // Sprachdatei einlesen
 $L = LBSystem::readlanguage("language.ini");
-$htmlhead = "<link rel='stylesheet' type='text/css' href='assets/styles.css?v=3.0'>";
+$htmlhead = "<link rel='stylesheet' type='text/css' href='assets/styles.css?v=3.1'>";
 $sonox = new Sonox();
 $settings = $sonox->readSettings();
 
@@ -42,6 +42,18 @@ $index = 0;
         apiPort: <?= $apiPort ?>
     }
 </script>
+
+<!-- Modal für die API-Antwort -->
+<div data-role="popup" id="apiResponseModal" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width: 90%; max-height: 80%; min-width: 300px; min-height: 400px">
+    <div data-role="header" data-theme="a">
+        <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+        <h1>API Response</h1>
+    </div>
+    <div role="main" class="ui-content" style="overflow-y: auto; max-height: 60vh;">
+        <pre id="apiResponseContent" style="white-space: pre-wrap; word-wrap: break-word;"></pre>
+        <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Schließen</a>
+    </div>
+</div>
 
 <h1>Overview of your Sonos Setup</h1>
 
@@ -100,16 +112,29 @@ $index = 0;
             foreach ($actions as $endpoint => $description): ?>
                 <tr>
                     <td>
-                        <strong><?= htmlspecialchars($description) ?></strong><br>
+                        <strong> <?= $description ?></strong><br>
                         <span><?= htmlspecialchars($api_base_url . $endpoint) ?></span>
+                        <?php
+                        // Dynamisch mit JavaScript befüllen
+                        $hasRoom = strpos($endpoint, '{room}') !== false;
+                        $hasSecondRoom = strpos($endpoint, '{roomName}') !== false;
+                        ?>
                         <div class="input-group">
-                            <?php
-                            // Platzhalter erkennen und Select-Felder generieren
-                            if (strpos($endpoint, '{room}') !== false): ?>
+
+                            <?php if ($hasRoom): ?>
                                 <div class="ui-field-contain">
-                                    <label for="param-room-<?= $index ?>"><?= $L['COMMON.ROOM'] ?>
-                                        :</label>
+                                    <label for="param-room-<?= $index ?>"><?= $L['COMMON.ROOM'] ?>:</label>
                                     <select id="param-room-<?= $index ?>" data-select="param-room">
+                                        <option value="" selected="selected"><?= $L['COMMON.SELECT_ROOM'] ?></option>
+                                        <!-- Dynamisch mit JavaScript befüllen -->
+                                    </select>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if ($hasSecondRoom): ?>
+                                <div class="ui-field-contain">
+                                    <label for="param-roomName-<?= $index ?>"><?= $L['COMMON.ROOM_SECOND'] ?>:</label>
+                                    <select id="param-roomName-<?= $index ?>" data-select="param-roomName">
                                         <option value="" selected="selected"><?= $L['COMMON.SELECT_ROOM'] ?></option>
                                         <!-- Dynamisch mit JavaScript befüllen -->
                                     </select>
@@ -179,11 +204,11 @@ $index = 0;
                                        placeholder="z.B. B071918VCR">
                             <?php endif; ?>
                             <?php if (strpos($endpoint, 'preset')): ?>
-                            <div class="ui-field-contain">
-                                <label for="param-json-<?= $index ?>">Preset</label>
-                                <textarea rows="15" id="param-json-<?= $index ?>" class="param-json"
-                                          placeholder="json preset "></textarea>
-                            </div>
+                                <div class="ui-field-contain">
+                                    <label for="param-json-<?= $index ?>">Preset</label>
+                                    <textarea rows="15" id="param-json-<?= $index ?>" class="param-json"
+                                              placeholder="json preset "></textarea>
+                                </div>
                             <?php endif; ?>
                             <?php if (strpos($endpoint, '{clip}')): ?>
                                 <label for="clip-<?= $index ?>"><?= $L['COMMON.CLIP'] ?>:</label>
@@ -214,7 +239,7 @@ $index = 0;
                         </button>
                     </td>
                     <td>
-                        <button class="copy-path-btn  ui-btn ui-btn-a ui-shadow ui-corner-all"
+                        <button class="copy-path-btn ui-btn ui-btn-a ui-shadow ui-corner-all"
                                 data-endpoint="<?= htmlspecialchars($endpoint) ?>"
                                 data-index="<?= $index ?>"><?= $L['ENDPOINTS.COPY_PATH'] ?>
                         </button>
@@ -224,15 +249,11 @@ $index = 0;
             <?php endforeach; ?>
             </tbody>
         </table>
-
     </div>
 
 <?php endforeach; ?>
-</div>
 
-<div id="response-box" class="response-box"><?= $L['ENDPOINTS.RESPONSE_PLACEHOLDER'] ?></div>
-
-<script src='assets/index.js'></script>
+<script src='assets/index.js?v=1'></script>
 
 <?php
 LBWeb::lbfooter();
