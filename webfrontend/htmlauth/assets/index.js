@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const apiBaseUrl = `${sonoxData.apiUrl}:${sonoxData.apiPort}`;
     const responseBox = document.getElementById("response-box");
     const playerSelects = document.querySelectorAll('[data-select="param-room"], [data-select="param-roomName"]');
+    const favoriteSelects = document.querySelectorAll('[data-select="param-favoriteName"]');
+    const playlistSelects = document.querySelectorAll('[data-select="param-playlistName"]');
 
     var zones = [];
     let isLoadingZones = false;
@@ -22,7 +24,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-
     // Funktion zum Bauen der URL
     function buildApiUrl(button) {
         const endpoint = button.dataset.endpoint;
@@ -33,6 +34,8 @@ document.addEventListener("DOMContentLoaded", function () {
             {key: "{room}", id: `param-room-${index}`},
             {key: "{roomName}", id: `param-roomName-${index}`},
             {key: "{name}", id: `param-name-${index}`},
+            {key: "{playlistName}", id: `param-playlistName-${index}`},
+            {key: "{favoriteName}", id: `param-favoriteName-${index}`},
             {key: "{value}", id: `param-value-${index}`},
             {key: "{preset}", id: `param-json-${index}`},
             {key: "{phrase}", id: `param-phrase-${index}`},
@@ -88,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 responseContent.textContent = JSON.stringify(data, null, 2);
 
                 // Modal öffnen
-                $("#apiResponseModal").popup("open",{transition: "fade"});
+                $("#apiResponseModal").popup("open", {transition: "fade"});
 
                 // Zonen aktualisieren und anschließend die Übersicht aktualisieren
                 await updatePlayerOverview();
@@ -100,43 +103,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-
-    // Funktion zum Aktualisieren der Player-Übersicht
-    /* function updatePlayerOverview() {
-         const tableBody = document.querySelector("#player-overview-table tbody");
-         tableBody.innerHTML = ""; // Tabelle leeren
-
-         if (zones.length === 0) {
-             tableBody.innerHTML = `<tr><td colspan="11">Keine Player-Daten gefunden.</td></tr>`;
-             return;
-         }
-         zones.forEach(zone => {
-             zone.members.forEach(member => {
-                 const state = member.state;
-                 const albumArtUri = state.currentTrack.absoluteAlbumArtUri || "https://via.placeholder.com/100";
-
-                 const row = document.createElement("tr");
-                 row.innerHTML = `
-                             <td><img src="${albumArtUri}" alt="Album Art" class="album-art"></td>
-                             <td>${member.roomName}</td>
-                             <td>${state.currentTrack.title || "N/A"}</td>
-                             <td>${state.currentTrack.artist || "N/A"}</td>
-                             <td>${state.currentTrack.album || "N/A"}</td>
-                             <td>${state.currentTrack.stationName || "N/A"}</td>
-                             <td>${state.playbackState}</td>
-                             <td>${state.volume}</td>
-                             <td>${state.mute ? "X" : ""}</td>
-                             <td>
-                                 Bass: ${state.equalizer.bass},
-                                 Treble: ${state.equalizer.treble},
-                                 Loudness: ${state.equalizer.loudness ? "X" : ""}
-                             </td>
-                             <td>${state.elapsedTimeFormatted || "00:00:00"}</td>
-                         `;
-                 tableBody.appendChild(row);
-             });
-         });
-     } */
 
     async function updatePlayerOverview() {
         await loadZones();
@@ -206,13 +172,37 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    async function populateDropdown(endpoint, selects) {
+        try {
+            // Daten vom angegebenen Endpunkt abrufen
+            const response = await fetch(endpoint);
+            const items = await response.json();
+
+            console.log(`Fetched items from ${endpoint}:`, items);
+
+            // Jedes Select-Element mit den abgerufenen Daten befüllen
+            selects.forEach(select => {
+                // Vorherige Optionen entfernen
+                select.innerHTML = "";
+
+                items.forEach(item => {
+                    const option = document.createElement("option");
+                    option.value = option.textContent = item;
+                    select.appendChild(option);
+                });
+            });
+        } catch (err) {
+            console.error(`Error during fetching data from ${endpoint}:`, err);
+        }
+    }
+
     document.querySelectorAll(".copy-btn, .copy-path-btn").forEach(button => {
         button.addEventListener("click", function () {
             let textToCopy;
             const fullUrl = buildApiUrl(this);
             if (this.classList.contains("copy-btn")) {
                 if (!fullUrl) return; // Abbrechen, falls buildApiUrl null zurückgibt
-                textToCopy = fullUrl;
+                textToCopy = new URL(fullUrl);
             } else if (this.classList.contains("copy-path-btn")) {
                 // Für den Button mit der Klasse 'copy-path-btn' nur den Endpunkt kopieren
                 textToCopy = new URL(fullUrl).pathname;
@@ -278,16 +268,25 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Hauptfunktion
-   async function initialize() {
+    async function initialize() {
 
-       await updatePlayerOverview(); // Tabelle aktualisieren
+        await updatePlayerOverview(); // Tabelle aktualisieren
         populatePresetTextarea(); // Textareas befüllen
         populatePlayerSelects();
+        // Favoriten befüllen
+        await populateDropdown(`${apiBaseUrl}/favorites`, favoriteSelects);
+
+// Playlisten befüllen
+        await populateDropdown(`${apiBaseUrl}/playlists`, playlistSelects);
 
     }
 
     (async () => {
         await initialize();
+        // Alle 5 Sekunden die Funktion ausführen
+        setInterval(() => {
+            updatePlayerOverview().catch(err => console.error("Error in setInterval:", err));
+        }, 5000);
     })();
 
 

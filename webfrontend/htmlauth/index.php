@@ -152,11 +152,20 @@ $index = 0;
                             <?php endif; ?>
 
 
-                            <?php if (strpos($endpoint, '{name}')): ?>
+                            <?php if (strpos($endpoint, '{favoriteName}')): ?>
                                 <div class="ui-field-contain">
-                                    <label for="param-name-<?= $index ?>"><?= $L['COMMON.NAME'] ?>:</label>
-                                    <input type="text" id="param-name-<?= $index ?>" class="param-name"
-                                           placeholder="z.B. Lieblingsplaylist">
+                                    <label for="param-favoriteName-<?= $index ?>"><?= $L['COMMON.NAME'] ?>:</label>
+                                    <select id="param-favoriteName-<?= $index ?>" data-select="param-favoriteName">
+                                        <option value="" selected="selected"></option>
+                                        <!-- Dynamisch mit JavaScript befüllen -->
+                                </div>
+                            <?php endif; ?>
+                            <?php if (strpos($endpoint, '{playlistName}')): ?>
+                                <div class="ui-field-contain">
+                                    <label for="param-playlistName-<?= $index ?>"><?= $L['COMMON.NAME'] ?>:</label>
+                                    <select id="param-playlistName-<?= $index ?>" data-select="param-playlistName">
+                                        <option value="" selected="selected"></option>
+                                        <!-- Dynamisch mit JavaScript befüllen -->
                                 </div>
                             <?php endif; ?>
 
@@ -253,7 +262,7 @@ $index = 0;
 
 <?php endforeach; ?>
 
-<script src='assets/index.js?v=1'></script>
+<script src='assets/index.js?v=3.1'></script>
 
 <?php
 LBWeb::lbfooter();

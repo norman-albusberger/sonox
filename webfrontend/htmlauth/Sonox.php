@@ -81,8 +81,8 @@ class Sonox
 
 
             $L['ENDPOINTS.PLAYLIST_ACTIONS'] => [
-                "/{room}/favorite/{name}" => $L['ENDPOINTS.PLAY_FAVORITE'],
-                "/{room}/playlist/{name}" => $L['ENDPOINTS.PLAY_PLAYLIST'],
+                "/{room}/favorite/{favoriteName}" => $L['ENDPOINTS.PLAY_FAVORITE'],
+                "/{room}/playlist/{playlistName}" => $L['ENDPOINTS.PLAY_PLAYLIST'],
                 "/{room}/queue" => $L['ENDPOINTS.GET_QUEUE'],
                 "/{room}/clearqueue" => $L['ENDPOINTS.CLEAR_QUEUE']
             ],
