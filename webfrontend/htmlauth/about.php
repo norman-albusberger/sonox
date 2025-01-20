@@ -30,6 +30,11 @@ LBWeb::lbheader($L['COMMON.TITLE'], "http://www.loxwiki.eu:80/x/2wzL", "help.htm
 <h2><?= $L['ABOUT.LINKS_TITLE']; ?></h2>
 <ul data-role="listview" data-inset="true">
     <li>
+        <a href="https://wiki.loxberry.de/plugins/sonox/start" target="_blank">
+            <?= $L['ABOUT.LOXBERRY_WIKI_LINK_TEXT']; ?>
+        </a>
+    </li>
+    <li>
         <a href="https://www.loxone.com/enen/kb/virtual-inputs-outputs/" target="_blank">
             <?= $L['ABOUT.LOXONE_DOCS_LINK_TEXT']; ?>
         </a>

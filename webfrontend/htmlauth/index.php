@@ -156,7 +156,7 @@ $index = 0;
                                 <div class="ui-field-contain">
                                     <label for="param-favoriteName-<?= $index ?>"><?= $L['COMMON.NAME'] ?>:</label>
                                     <select id="param-favoriteName-<?= $index ?>" data-select="param-favoriteName">
-                                        <option value="" selected="selected"></option>
+                                        <option value="" selected="selected">Favorite</option>
                                         <!-- Dynamisch mit JavaScript befüllen -->
                                 </div>
                             <?php endif; ?>
@@ -164,7 +164,7 @@ $index = 0;
                                 <div class="ui-field-contain">
                                     <label for="param-playlistName-<?= $index ?>"><?= $L['COMMON.NAME'] ?>:</label>
                                     <select id="param-playlistName-<?= $index ?>" data-select="param-playlistName">
-                                        <option value="" selected="selected"></option>
+                                        <option value="" selected="selected">Playlist</option>
                                         <!-- Dynamisch mit JavaScript befüllen -->
                                 </div>
                             <?php endif; ?>
