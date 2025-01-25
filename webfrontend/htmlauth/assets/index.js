@@ -106,7 +106,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function updatePlayerOverview() {
         await loadZones();
-        console.log(isLoadingZones);
         const tableBody = document.querySelector("#player-overview-table tbody");
         tableBody.innerHTML = ""; // Tabelle leeren
 
