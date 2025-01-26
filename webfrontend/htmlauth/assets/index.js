@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
     const apiBaseUrl = `${sonoxData.apiUrl}:${sonoxData.apiPort}`;
-    const responseBox = document.getElementById("response-box");
     const playerSelects = document.querySelectorAll('[data-select="param-room"], [data-select="param-roomName"]');
     const favoriteSelects = document.querySelectorAll('[data-select="param-favoriteName"]');
     const playlistSelects = document.querySelectorAll('[data-select="param-playlistName"]');

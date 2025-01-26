@@ -1,5 +1,6 @@
 <?php
 require_once "loxberry_system.php";
+require_once "loxberry_io.php";
 require_once "loxberry_web.php";
 require_once "Sonox.php";
 
@@ -33,16 +34,21 @@ $server_ip = $_SERVER['SERVER_ADDR'];
 $apiUrl = "http://{$server_ip}";
 $apiPort = $settings["port"];
 $api_base_url = "{$apiUrl}:{$apiPort}";
+// MQTT-Verbindungsdetails abrufen
+$mqttDetails = mqtt_connectiondetails();
+$mqttUsername = $mqttDetails['brokeruser'];
+$mqttPassword = $mqttDetails['brokerpass'];
 
 $index = 0;
 ?>
 <script>
     const sonoxData = {
         apiUrl: "<?= $apiUrl ?>",
-        apiPort: <?= $apiPort ?>
+        apiPort: <?= $apiPort ?>,
+        mqttUsername: "<?= $mqttUsername ?>",
+        mqttPassword: "<?= $mqttPassword ?>"
     }
 </script>
-
 <!-- Modal für die API-Antwort -->
 <div data-role="popup" id="apiResponseModal" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width: 90%; max-height: 80%; min-width: 300px; min-height: 400px">
     <div data-role="header" data-theme="a">

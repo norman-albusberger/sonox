@@ -20,7 +20,6 @@ LBWeb::lbheader($L['COMMON.TITLE'], "http://www.loxwiki.eu:80/x/2wzL", "help.htm
 
 <h2><?= $L['ABOUT.TITLE']; ?></h2>
 <p><strong><?= $L['ABOUT.PLUGIN_NAME_LABEL']; ?>:</strong> <?= $L['ABOUT.PLUGIN_NAME']; ?></p>
-<p><strong><?= $L['ABOUT.VERSION_LABEL']; ?>:</strong> <?= $L['ABOUT.VERSION']; ?></p>
 <p>
     <strong><?= $L['ABOUT.AUTHOR_LABEL']; ?>:</strong> <?= $L['ABOUT.AUTHOR']; ?>
     <a href="<?= $L['ABOUT.AUTHOR_BIO_LINK']; ?>" target="_blank"><?= $L['ABOUT.AUTHOR_BIO_LABEL']; ?></a>
