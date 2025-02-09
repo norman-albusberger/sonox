@@ -38,6 +38,9 @@ $api_base_url = "{$apiUrl}:{$apiPort}";
 $mqttDetails = mqtt_connectiondetails();
 $mqttUsername = $mqttDetails['brokeruser'];
 $mqttPassword = $mqttDetails['brokerpass'];
+$mqttBroker = $mqttDetails['brokeraddress'];
+
+var_dump($mqttDetails);
 
 $index = 0;
 ?>
@@ -46,7 +49,8 @@ $index = 0;
         apiUrl: "<?= $apiUrl ?>",
         apiPort: <?= $apiPort ?>,
         mqttUsername: "<?= $mqttUsername ?>",
-        mqttPassword: "<?= $mqttPassword ?>"
+        mqttPassword: "<?= $mqttPassword ?>",
+        mqttBroker: "<?= $mqttBroker ?>"
     }
 </script>
 <!-- Modal für die API-Antwort -->

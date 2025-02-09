@@ -17,6 +17,7 @@ Since other plugins are way too complicated and unstable I decided to create my 
 - **Web Interface**: Test and copy URLs for Loxone outputs.
 - **Text-to-Speech (TTS)**: Announcements and notifications.
 - **Clip Playback**: Audio clips for alarms or doorbell notifications.
+- **MQTT Support**: Publishes Sonos events to MQTT topics.
 
 # Requirements
 1. **Loxberry**: Installed and running with NodeJS.

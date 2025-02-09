@@ -19,5 +19,8 @@
   "sonos": {
     "searchTimeout": 5000,
     "pollingInterval": 60000
+  },
+  "mqtt": {
+    "active": false
   }
 }
