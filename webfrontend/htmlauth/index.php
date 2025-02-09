@@ -40,7 +40,6 @@ $mqttUsername = $mqttDetails['brokeruser'];
 $mqttPassword = $mqttDetails['brokerpass'];
 $mqttBroker = $mqttDetails['brokeraddress'];
 
-var_dump($mqttDetails);
 
 $index = 0;
 ?>
