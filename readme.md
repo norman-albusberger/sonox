@@ -7,7 +7,7 @@ SonoX - A Loxberry Plugin [![PayPal donate button](https://img.shields.io/badge/
 </p>
 
 
-SonoX integrates Sonos (especially the S1 version.) speakers with your Loxone Smart Home system, leveraging the [node-sonos-http-api](https://github.com/jishi/node-sonos-http-api) for seamless control and automation.
+SonoX integrates Sonos (especially the S1 version.) speakers with your Loxone Smart Home system, leveraging a custom fork of the node-sonos-http-api [node-sonos-http-api](https://github.com/norman-albusberger/node-sonos-http-api) for seamless control and automation.
 Since other plugins are way too complicated and unstable I decided to create my own one. 
 
 # Features
