@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             zone.members.forEach(member => {
                 const state = member.state;
-                const albumArtUri = state.currentTrack.absoluteAlbumArtUri || "https://via.placeholder.com/100";
+                const albumArtUri = state.currentTrack.absoluteAlbumArtUri || "https://fakeimg.pl/100x100?text=No+Album-Art";
 
                 // Markiere den Coordinator der Zone
                 const isCoordinator = member.uuid === zone.coordinator.uuid;
@@ -136,10 +136,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 row.innerHTML = `
                 <td><img src="${albumArtUri}" alt="Album Art" class="album-art"></td>
                 <td>${member.roomName}${coordinatorLabel}</td>
-                <td>${state.currentTrack.title || "N/A"}</td>
-                <td>${state.currentTrack.artist || "N/A"}</td>
-                <td>${state.currentTrack.album || "N/A"}</td>
-                <td>${state.currentTrack.stationName || "N/A"}</td>
+                <td>${state.currentTrack.title || "-"}</td>
+                <td>${state.currentTrack.artist || "-"}</td>
+                <td>${state.currentTrack.album || "-"}</td>
+                <td>${state.currentTrack.stationName || "-"}</td>
                 <td>${state.playbackState}</td>
                 <td>${state.volume}%</td>
                 <td>${state.mute ? "X" : ""}</td>
