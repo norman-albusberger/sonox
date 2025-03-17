@@ -1,5 +1,8 @@
-SonoX - A Loxberry Plugin [![PayPal donate button](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/paypalme/normanalbusberger "Donate to SonoX using Paypal") 
------------------------------
+SonoX - A Loxberry Plugin for Sonos Speakers [![PayPal donate button](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/paypalme/normanalbusberger "Donate to SonoX using Paypal") 
+-------
+You can download the latest release from the [Loxberry Page ](https://wiki.loxberry.de/plugins/sonox/start).
+
+
 ***Seamlessly integrate and control your Sonos speakers with Loxone.***
 
 <p align="center">
@@ -7,10 +10,10 @@ SonoX - A Loxberry Plugin [![PayPal donate button](https://img.shields.io/badge/
 </p>
 
 
-SonoX integrates Sonos (especially the S1 version.) speakers with your Loxone Smart Home system, leveraging a custom fork of the node-sonos-http-api [node-sonos-http-api](https://github.com/norman-albusberger/node-sonos-http-api) for seamless control and automation.
-Since other plugins are way too complicated and unstable I decided to create my own one. 
 
-# Features
+SonoX integrates Sonos (especially the S1 version.) speakers with your Loxone Smart Home system for seamless control and automation. The plugin provides a web interface for testing commands and copying URLs for Loxone outputs. You can control playback, adjust volume, and manage groups across rooms. SonoX also supports text-to-speech (TTS) and audio clips for announcements and notifications. The plugin publishes Sonos events to MQTT topics for further integration with your smart home system.
+
+# Features at a Glance
 - **Playback Control**: Play, pause, skip, and adjust volume.
 - **Group Management**: Synchronized playback across rooms.
 - **Smart Home Integration**: Automate Sonos actions with Loxone events.
