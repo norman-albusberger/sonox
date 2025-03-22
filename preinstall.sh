@@ -18,28 +18,9 @@ if ! command -v git >/dev/null 2>&1; then
     exit 1
 fi
 
-if ! command -v npm >/dev/null 2>&1; then
-    echo "<ERROR> npm is not installed. Please install npm to proceed."
-    exit 1
-fi
-
-# Check Node.js version
-if command -v node >/dev/null 2>&1; then
-    INSTALLED_NODE_VERSION=$(node -v | sed 's/v//')
-    if [ "$(printf '%s\n' "$REQUIRED_NODE_VERSION" "$INSTALLED_NODE_VERSION" | sort -V | head -n1)" != "$REQUIRED_NODE_VERSION" ]; then
-        echo "<ERROR> Node.js version $REQUIRED_NODE_VERSION or higher is required. Installed version is $INSTALLED_NODE_VERSION."
-        exit 1
-    else
-        echo "<OK> Node.js version $INSTALLED_NODE_VERSION is compatible."
-    fi
-else
-    echo "<ERROR> Node.js is not installed. Please install Node.js version $REQUIRED_NODE_VERSION or higher."
-    exit 1
-fi
-
 # Check if the API is already installed
 if [ -d "$API_DIR" ]; then
-    echo "<INFO> node-sonos-http-api is already installed. Skipping installation."
+    echo "<INFO> node-sonos-http-api is already installed. Skipping git clone."
 else
     echo "<INFO> Installing node-sonos-http-api..."
     git clone https://github.com/norman-albusberger/node-sonos-http-api.git "$API_DIR"
@@ -50,11 +31,6 @@ else
     fi
     if ! cd "$API_DIR"; then
         echo "<ERROR> Failed to change directory to $API_DIR."
-        exit 1
-    fi
-    npm install
-    if [ $? -ne 0 ]; then
-        echo "<ERROR> Failed to install npm dependencies."
         exit 1
     fi
     echo "<OK> node-sonos-http-api successfully installed."

@@ -42,16 +42,8 @@ $mqttBroker = $mqttDetails['brokeraddress'];
 
 
 $index = 0;
+
 ?>
-<script>
-    const sonoxData = {
-        apiUrl: "<?= $apiUrl ?>",
-        apiPort: <?= $apiPort ?>,
-        mqttUsername: "<?= $mqttUsername ?>",
-        mqttPassword: "<?= $mqttPassword ?>",
-        mqttBroker: "<?= $mqttBroker ?>"
-    }
-</script>
 <!-- Modal für die API-Antwort -->
 <div data-role="popup" id="apiResponseModal" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width: 90%; max-height: 80%; min-width: 300px; min-height: 400px">
     <div data-role="header" data-theme="a">
@@ -65,6 +57,10 @@ $index = 0;
 </div>
 
 <h1>Overview of your Sonos Setup</h1>
+<div id="api-status" class="ui-state-highlight ui-corner-all" style="margin: 10px 0; padding: 0.5em;">
+  <span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+  Verifying connection to the API
+</div>
 
 <div class="ui-content">
     <table id="player-overview-table" class="state-table">

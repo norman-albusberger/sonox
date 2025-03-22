@@ -14,6 +14,13 @@ if [ -f "$SERVICE_FILE" ]; then
     echo "Entferne den Dienst..."
     sudo rm -f "$SERVICE_FILE"
     sudo systemctl daemon-reload
+
+    if [ -d "$API_DIR" ]; then
+        echo "Entferne node-sonos-http-api Verzeichnis..."
+        sudo rm -rf "$API_DIR"
+    else
+        echo "node-sonos-http-api Verzeichnis nicht gefunden."
+    fi
 else
     echo "Sonos HTTP API Dienst nicht gefunden, überspringe."
 fi
@@ -34,6 +41,14 @@ if [ -d "$DATA_DIR" ]; then
     echo "Daten entfernt."
 else
     echo "Datenverzeichnis nicht gefunden."
+fi
+
+PLUGIN_DIR="$LBPBIN/sonox"
+if [ -d "$PLUGIN_DIR" ]; then
+    echo "Entferne Plugin-Verzeichnis..."
+    sudo rm -rf "$PLUGIN_DIR"
+else
+    echo "Plugin-Verzeichnis nicht gefunden oder bereits entfernt."
 fi
 
 echo "Deinstallation abgeschlossen."
