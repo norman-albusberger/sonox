@@ -44,6 +44,15 @@ $mqttBroker = $mqttDetails['brokeraddress'];
 $index = 0;
 
 ?>
+<script>
+    const sonoxData = {
+        apiUrl: "<?= $apiUrl ?>",
+        apiPort: <?= $apiPort ?>,
+        mqttUsername: "<?= $mqttUsername ?>",
+        mqttPassword: "<?= $mqttPassword ?>",
+        mqttBroker: "<?= $mqttBroker ?>"
+    }
+</script>
 <!-- Modal für die API-Antwort -->
 <div data-role="popup" id="apiResponseModal" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width: 90%; max-height: 80%; min-width: 300px; min-height: 400px">
     <div data-role="header" data-theme="a">
