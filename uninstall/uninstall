@@ -6,10 +6,38 @@ if [ -z "$LBPBIN" ] || [ -z "$LBPDATA" ] || [ -z "$LBPLOG" ]; then
     exit 1
 fi
 
+DEVICE_ID_FILE="$LBPDATA/sonox/device_id.txt"
+
+if [ -f "$DEVICE_ID_FILE" ]; then
+    DEVICE_ID=$(cat "$DEVICE_ID_FILE")
+    echo "Device ID aus Datei geladen: $DEVICE_ID"
+elif [ -f /etc/machine-id ]; then
+    DEVICE_ID=$(cat /etc/machine-id | sha256sum | cut -c1-16)
+    echo "Device ID aus /etc/machine-id generiert: $DEVICE_ID"
+else
+    echo "Fehler: Keine gültige Geräte-ID gefunden."
+    DEVICE_ID=""
+fi
+
 API_DIR="$LBPBIN/sonox/node-sonos-http-api"
 SERVICE_FILE="/etc/systemd/system/sonos-http-api.service"
 
 echo "Starte die Deinstallation von Sonox..."
+
+if [ -n "$DEVICE_ID" ]; then
+    FIREBASE_URL="https://sonox-db37a-default-rtdb.europe-west1.firebasedatabase.app/sonox-tracking/${DEVICE_ID}.json"
+    TRACKING_DATA=$(cat <<EOF
+{
+  "event": "plugin_uninstalled",
+  "plugin_version": "1.0.0",
+  "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+}
+EOF
+)
+    curl -s -X PUT -H "Content-Type: application/json" -d "$TRACKING_DATA" "$FIREBASE_URL" >/dev/null && \
+    echo "Send uninstall" || \
+    echo "uninstall was not send"
+fi
 
 # Sonos HTTP API Dienst stoppen und entfernen
 if [ -f "$SERVICE_FILE" ]; then

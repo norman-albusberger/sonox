@@ -6,6 +6,30 @@ if [ -z "$LBPBIN" ] || [ -z "$LBPDATA" ]; then
     exit 1
 fi
 
+# Geräte-ID aus /etc/machine-id generieren (stabil und anonymisiert)
+if [ -f /etc/machine-id ]; then
+    DEVICE_ID=$(cat /etc/machine-id | sha256sum | cut -c1-16)
+    echo "<INFO> Using stable device ID based on /etc/machine-id: $DEVICE_ID"
+    echo "$DEVICE_ID" > "$LBPDATA/sonox/device_id.txt"
+
+
+    FIREBASE_URL="https://sonox-db37a-default-rtdb.europe-west1.firebasedatabase.app/sonox-tracking/${DEVICE_ID}.json"
+    TRACKING_DATA=$(cat <<EOF
+{
+  "event": "plugin_installed",
+  "plugin_version": "1.0.0",
+  "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+}
+EOF
+)
+
+    curl -s -X PUT -H "Content-Type: application/json" -d "$TRACKING_DATA" "$FIREBASE_URL" >/dev/null && \
+    echo "<INFO> tracked for $DEVICE_ID." || \
+    echo "<INFO> not tracked for $DEVICE_ID."
+else
+    echo "<ERROR> /etc/machine-id not found. Cannot generate stable device ID."
+fi
+
 # Wichtige Variablen
 API_DIR="$LBPBIN/sonox/node-sonos-http-api"
 SERVICE_FILE="/etc/systemd/system/sonos-http-api.service"
