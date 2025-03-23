@@ -1,6 +1,11 @@
 #!/bin/bash
 
 # Umgebungsvariablen
+if [ -z "$LBPBIN" ] || [ -z "$LBPDATA" ] || [ -z "$LBPLOG" ]; then
+    echo "Fehlende LoxBerry-Umgebungsvariablen. Breche Deinstallation ab."
+    exit 1
+fi
+
 API_DIR="$LBPBIN/sonox/node-sonos-http-api"
 SERVICE_FILE="/etc/systemd/system/sonos-http-api.service"
 
@@ -18,6 +23,12 @@ if [ -f "$SERVICE_FILE" ]; then
     if [ -d "$API_DIR" ]; then
         echo "Entferne node-sonos-http-api Verzeichnis..."
         sudo rm -rf "$API_DIR"
+
+        NODE_DIR="$API_DIR/node"
+        if [ -d "$NODE_DIR" ]; then
+            echo "Entferne lokale Node.js-Installation..."
+            sudo rm -rf "$NODE_DIR"
+        fi
     else
         echo "node-sonos-http-api Verzeichnis nicht gefunden."
     fi
@@ -49,6 +60,10 @@ if [ -d "$PLUGIN_DIR" ]; then
     sudo rm -rf "$PLUGIN_DIR"
 else
     echo "Plugin-Verzeichnis nicht gefunden oder bereits entfernt."
+fi
+
+if [ -d "$LBPBIN/sonox" ] || [ -d "$LBPDATA/sonox" ] || [ -d "$LBPLOG/sonox" ]; then
+    echo "WARNUNG: Einige Verzeichnisse konnten nicht vollständig entfernt werden."
 fi
 
 echo "Deinstallation abgeschlossen."

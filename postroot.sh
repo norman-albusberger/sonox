@@ -111,6 +111,9 @@ else
     echo "<WARNING> No package.json found in $API_DIR – skipping npm install."
 fi
 
+# Extrahiere den Port aus der settings.json
+API_PORT=$(jq -r '.port // 5005' "$SETTINGS_FILE")
+
 # Systemd-Dienst einrichten
 if [ ! -f "$SERVICE_FILE" ]; then
     echo "<INFO> Creating systemd service for node-sonos-http-api..."
@@ -152,13 +155,17 @@ else
     echo "<WARNING> systemd service sonos-http-api.service already exists."
 fi
 
-echo "<INFO> Checking if API is reachable on port 5005..."
-curl -s --max-time 2 http://localhost:5005/zones > /dev/null
+echo "<INFO> Checking if API is reachable on port ${API_PORT}..."
+for i in {1..7}; do
+    curl -sf --max-time 2 http://127.0.0.1:${API_PORT}/zones > /dev/null && break
+    echo "<INFO> Waiting for API to become available... ($i/7)"
+    sleep 2
+done
 
-if [ $? -eq 0 ]; then
+if curl -sf --max-time 2 http://127.0.0.1:${API_PORT}/zones > /dev/null; then
     echo "<OK> node-sonos-http-api is up and responding."
 else
-    echo "<WARNING> node-sonos-http-api is not responding. This might be due to port 5005 already being used."
+    echo "<WARNING> node-sonos-http-api is not responding. This might be due to port ${API_PORT} already being used."
     echo "<HINT> You can change the port in the plugin settings and save."
 fi
 exit 0

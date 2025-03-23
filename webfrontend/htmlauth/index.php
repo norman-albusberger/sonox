@@ -66,9 +66,8 @@ $index = 0;
 </div>
 
 <h1>Overview of your Sonos Setup</h1>
-<div id="api-status" class="ui-state-highlight ui-corner-all" style="margin: 10px 0; padding: 0.5em;">
-  <span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
-  Verifying connection to the API
+<div id="api-status" class="ui-body-a ui-content ui-corner-all" style="margin: 10px 0; padding: 1em; border: 2px solid #4CAF50; background-color: #E8F5E9; color: #2E7D32;">
+    <strong><i class="fa fa-info-circle" aria-hidden="true"></i> API Status:</strong> Verifying connection...
 </div>
 
 <div class="ui-content">
@@ -276,7 +275,7 @@ $index = 0;
 
 <?php endforeach; ?>
 
-<script src='assets/index.js?v=3.1'></script>
+<script src='assets/index.js?v=3.4'></script>
 
 <?php
 LBWeb::lbfooter();

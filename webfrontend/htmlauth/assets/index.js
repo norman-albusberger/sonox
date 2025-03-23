@@ -4,8 +4,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const favoriteSelects = document.querySelectorAll('[data-select="param-favoriteName"]');
     const playlistSelects = document.querySelectorAll('[data-select="param-playlistName"]');
 
-    var zones = [];
+    let zones = [];
     let isLoadingZones = false;
+
 
     // Funktion, um die Zonen-Daten zu laden
     async function loadZones() {
@@ -15,7 +16,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const response = await fetch(`${apiBaseUrl}/zones`);
             zones = await response.json();
         } catch (err) {
-            console.error("Fehler beim Laden der Zonen-Daten:", err);
+            console.error("Zone data not available", err);
+            zones  = [];
         } finally {
             isLoadingZones = false;
         }
@@ -105,71 +107,73 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function updatePlayerOverview() {
         await loadZones();
+        const apiStatusElement = document.getElementById("api-status");
         const tableBody = document.querySelector("#player-overview-table tbody");
         tableBody.innerHTML = ""; // Tabelle leeren
 
         if (zones.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="12">Keine Player-Daten gefunden.</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="12">No Players available</td></tr>`;
+            apiStatusElement.className = "ui-body-a ui-content ui-corner-all";
+            apiStatusElement.style.border = "2px solid #F44336";
+            apiStatusElement.style.backgroundColor = "#FFEBEE";
+            apiStatusElement.style.color = "#C62828";
+            apiStatusElement.innerHTML = '<strong>API Status:</strong> API service is not reachable.';
         } else {
-            zones.forEach(zone => {
-                // Eine Zone markieren
-                const zoneRow = document.createElement("tr");
-                zoneRow.innerHTML = `
-                <td colspan="12" style="background-color: #f0f0f0; font-weight: bold;">
-                    Zone: ${zone.coordinator.roomName} (UUID: ${zone.uuid})
-                </td>
-            `;
-                tableBody.appendChild(zoneRow);
+            apiStatusElement.className = "ui-body-a ui-content ui-corner-all";
+            apiStatusElement.style.border = "2px solid #4CAF50";
+            apiStatusElement.style.backgroundColor = "#E8F5E9";
+            apiStatusElement.style.color = "#2E7D32";
+            apiStatusElement.innerHTML = '<strong>API Status:</strong> API service is up and running.';
+            renderPlayerOverview(tableBody);
 
-                zone.members.forEach(member => {
-                    const state = member.state;
-                    const albumArtUri = state.currentTrack.absoluteAlbumArtUri || "https://fakeimg.pl/100x100?text=No+Album-Art";
-
-                    // Markiere den Coordinator der Zone
-                    const isCoordinator = member.uuid === zone.coordinator.uuid;
-                    const coordinatorLabel = isCoordinator ? " (Leader)" : "";
-
-                    // Eine Zeile für jeden Player hinzufügen
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                    <td><img src="${albumArtUri}" alt="Album Art" class="album-art"></td>
-                    <td>${member.roomName}${coordinatorLabel}</td>
-                    <td>${state.currentTrack.title || "-"}</td>
-                    <td>${state.currentTrack.artist || "-"}</td>
-                    <td>${state.currentTrack.album || "-"}</td>
-                    <td>${state.currentTrack.stationName || "-"}</td>
-                    <td>${state.playbackState}</td>
-                    <td>${state.volume}%</td>
-                    <td>${state.mute ? "X" : ""}</td>
-                    <td>
-                        Bass: ${state.equalizer.bass}, 
-                        Treble: ${state.equalizer.treble}, 
-                        Loudness: ${state.equalizer.loudness ? "X" : ""}
-                    </td>
-                    <td>${state.elapsedTimeFormatted || "00:00:00"}</td>
-                `;
-                    tableBody.appendChild(row);
-                });
-            });
-        }
-
-        // API-Status-Anzeige aktualisieren
-        const apiStatusElement = document.getElementById("api-status");
-        if (apiStatusElement) {
-            if (zones.length === 0) {
-                apiStatusElement.className = "ui-state-error ui-corner-all";
-                apiStatusElement.innerHTML = '<span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>' +
-                    'Die Sonos HTTP API ist nicht erreichbar oder liefert keine Daten.';
-            } else {
-                apiStatusElement.className = "ui-state-highlight ui-corner-all";
-                apiStatusElement.innerHTML = '<span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>' +
-                    'Sonos HTTP API verbunden.';
-            }
         }
     }
 
+    function renderPlayerOverview(tableBody) {
+        zones.forEach(zone => {
+            // Eine Zone markieren
+            const zoneRow = document.createElement("tr");
+            zoneRow.innerHTML = `
+            <td colspan="12" style="background-color: #f0f0f0; font-weight: bold;">
+                Zone: ${zone.coordinator.roomName} (UUID: ${zone.uuid})
+            </td>
+        `;
+            tableBody.appendChild(zoneRow);
 
-    // Funktion zur Befüllung der Select-Felder
+            zone.members.forEach(member => {
+                const state = member.state;
+                const albumArtUri = state.currentTrack.absoluteAlbumArtUri || "https://fakeimg.pl/100x100?text=No+Album-Art";
+
+                // Markiere den Coordinator der Zone
+                const isCoordinator = member.uuid === zone.coordinator.uuid;
+                const coordinatorLabel = isCoordinator ? " (Leader)" : "";
+
+                // Eine Zeile für jeden Player hinzufügen
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                <td><img src="${albumArtUri}" alt="Album Art" class="album-art"></td>
+                <td>${member.roomName}${coordinatorLabel}</td>
+                <td>${state.currentTrack.title || "-"}</td>
+                <td>${state.currentTrack.artist || "-"}</td>
+                <td>${state.currentTrack.album || "-"}</td>
+                <td>${state.currentTrack.stationName || "-"}</td>
+                <td>${state.playbackState}</td>
+                <td>${state.volume}%</td>
+                <td>${state.mute ? "X" : ""}</td>
+                <td>
+                    Bass: ${state.equalizer.bass}, 
+                    Treble: ${state.equalizer.treble}, 
+                    Loudness: ${state.equalizer.loudness ? "X" : ""}
+                </td>
+                <td>${state.elapsedTimeFormatted || "00:00:00"}</td>
+            `;
+                tableBody.appendChild(row);
+            });
+        });
+    }
+
+
+// Funktion zur Befüllung der Select-Felder
     function populatePlayerSelects() {
         const players = zones.flatMap(zone => zone.members.map(member => member.roomName));
 
@@ -263,7 +267,7 @@ document.addEventListener("DOMContentLoaded", function () {
         };
     }
 
-    // Fülle die Textarea mit einem generierten Preset
+// Fülle die Textarea mit einem generierten Preset
     function populatePresetTextarea() {
         const textareas = document.querySelectorAll(".param-json");
         if (!zones || zones.length === 0) {
@@ -278,7 +282,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Hauptfunktion
+
+// Hauptfunktion
     async function initialize() {
 
         await updatePlayerOverview(); // Tabelle aktualisieren
@@ -287,7 +292,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Favoriten befüllen
         await populateDropdown(`${apiBaseUrl}/favorites`, favoriteSelects);
 
-        // Playlisten befüllen
+// Playlisten befüllen
         await populateDropdown(`${apiBaseUrl}/playlists`, playlistSelects);
 
     }
