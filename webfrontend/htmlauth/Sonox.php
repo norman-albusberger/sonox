@@ -53,7 +53,6 @@ class Sonox
                 "/pauseall" => $L['ENDPOINTS.PAUSE_ALL'],
                 "/resumeall" => $L['ENDPOINTS.RESUME_ALL'],
                 //"/reindex" => $L['ENDPOINTS.REINDEX_LIBRARY'],
-                "/preset/{preset}" => $L['ENDPOINTS.PRESET'],
                 "/favorites" => $L['ENDPOINTS.FAVORITES']
             ],
             $L['ENDPOINTS.ROOM_ACTIONS'] => [

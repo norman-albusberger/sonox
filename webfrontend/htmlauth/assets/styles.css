@@ -66,3 +66,38 @@
     color: red;
     font-size: 0.9em;
 }
+
+.sonox-banner {
+    background: linear-gradient(90deg, #111, #1a1a1a);
+    color: #f2f2f2;
+    padding: 18px 24px;
+    text-align: center;
+    font-size: 15px;
+    line-height: 1.6;
+    border-top: 3px solid #00bcd4;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.sonox-banner strong {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.sonox-banner a.sonox-banner-btn {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 8px 18px;
+    background-color: #00bcd4;
+    color: #000;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.sonox-banner a.sonox-banner-btn:hover {
+    background-color: #00acc1;
+    transform: scale(1.03);
+    color: #000;
+}

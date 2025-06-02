@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
             zones = await response.json();
         } catch (err) {
             console.error("Zone data not available", err);
-            zones  = [];
+            zones = [];
         } finally {
             isLoadingZones = false;
         }
@@ -282,10 +282,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-
 // Hauptfunktion
     async function initialize() {
-
         await updatePlayerOverview(); // Tabelle aktualisieren
         populatePresetTextarea(); // Textareas befüllen
         populatePlayerSelects();

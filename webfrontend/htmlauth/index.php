@@ -44,6 +44,27 @@ $mqttBroker = $mqttDetails['brokeraddress'];
 $index = 0;
 
 ?>
+<div style="border-radius: 16px; background: linear-gradient(135deg, #666681, #2b2b44); padding: 2rem; color: #ffffff; font-family: sans-serif; max-width: 800px; margin: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+    <h1 style="margin-top: 0; font-size: 2rem;">SonoX-Pro – The Smart Bridge Between Sonos and Loxone</h1>
+    <p style="font-size: 1.1rem; line-height: 1.6;">
+        Unlock the full potential of your smart home: control your Sonos speakers from your Loxone system with unmatched speed and flexibility. SonoX-Pro brings seamless integration and powerful tools.
+    </p>
+
+    <ul style="list-style-type: '✔ '; padding-left: 1.2rem; margin-bottom: 1.5rem;">
+        <li><strong>Built-in Preset Editor</strong> with instant preview and full control</li>
+        <li>Now Playing Sync via Loxone Text Inputs</li>
+        <li>Advanced Multiroom Synchronization</li>
+        <li>Priority Audio Routing (e.g. for alarms or doorbells)</li>
+        <li>Blazing Fast – designed for low-latency response</li>
+    </ul>
+    <p style="font-size: 1rem; font-style: italic; margin-top: -1rem; margin-bottom: 1.5rem;">
+        Combine it with ElevenLabs and let your smart home talk back – with stunningly realistic voices for Text-to-Speech.
+    </p>
+    <a href="https://sonox.net/" target="_blank" style="display: inline-block; padding: 0.75rem 1.5rem; background-color: #119a09; color: #fff; font-weight: bold; text-decoration: none; border-radius: 8px;">
+        Learn More & Get SonoX-Pro
+    </a>
+</div>
+
 <script>
     const sonoxData = {
         apiUrl: "<?= $apiUrl ?>",
@@ -63,8 +84,12 @@ $index = 0;
         <pre id="apiResponseContent" style="white-space: pre-wrap; word-wrap: break-word;"></pre>
         <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Schließen</a>
     </div>
-</div>
+    <div class="sonox-banner">
+        🚀 Upgrade to SonoX-Pro. With SonoX-Pro you can create powerful presets with custom endpoints, use lifelike TTS powered by Elevenlabs with over 20 natural human voices<br>
+        <a href="https://sonox.net/product/sonox-loxberry-plugin/" class="sonox-banner-btn">Upgrade now</a>
+    </div>
 
+</div>
 <h1>Overview of your Sonos Setup</h1>
 <div id="api-status" class="ui-body-a ui-content ui-corner-all" style="margin: 10px 0; padding: 1em; border: 2px solid #4CAF50; background-color: #E8F5E9; color: #2E7D32;">
     <strong><i class="fa fa-info-circle" aria-hidden="true"></i> API Status:</strong> Verifying connection...

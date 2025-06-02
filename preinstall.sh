@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Important variables (provided by LoxBerry)
-API_DIR="$LBPBIN/sonox-pro/node-sonos-http-api"
+API_DIR="$LBPBIN/sonox/node-sonos-http-api"
 REQUIRED_NODE_VERSION="14.0.0"
 
 echo "<INFO> Starting preparation for the installation of the Sonox plugin..."

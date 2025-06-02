@@ -64,22 +64,14 @@ else
     echo "Sonos HTTP API Dienst nicht gefunden, überspringe."
 fi
 
-# Logs und Daten bereinigen (optional)
+# Logs bereinigen (optional)
 LOG_DIR="$LBPLOG/sonox"
-DATA_DIR="$LBPDATA/sonox"
 echo "Optionale Bereinigung von Plugin-Logs und Daten..."
 if [ -d "$LOG_DIR" ]; then
     sudo rm -rf "$LOG_DIR"
     echo "Logs entfernt."
 else
     echo "Log-Verzeichnis nicht gefunden."
-fi
-
-if [ -d "$DATA_DIR" ]; then
-    sudo rm -rf "$DATA_DIR"
-    echo "Daten entfernt."
-else
-    echo "Datenverzeichnis nicht gefunden."
 fi
 
 PLUGIN_DIR="$LBPBIN/sonox"
