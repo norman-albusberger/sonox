@@ -10,7 +10,7 @@ fi
 if [ -f /etc/machine-id ]; then
     DEVICE_ID=$(cat /etc/machine-id | sha256sum | cut -c1-16)
     echo "<INFO> Using stable device ID based on /etc/machine-id: $DEVICE_ID"
-    echo "$DEVICE_ID" > "$LBPDATA/sonox/device_id.txt"
+    echo "$DEVICE_ID" > "$LBPDATA/sonox-pro/device_id.txt"
 
 
     FIREBASE_URL="https://sonox-db37a-default-rtdb.europe-west1.firebasedatabase.app/sonox-tracking/${DEVICE_ID}.json"
@@ -18,6 +18,7 @@ if [ -f /etc/machine-id ]; then
 {
   "event": "plugin_installed",
   "plugin_version": "1.0.0",
+  "plugin_name": "Sonox Pro",
   "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 }
 EOF
@@ -31,9 +32,9 @@ else
 fi
 
 # Wichtige Variablen
-API_DIR="$LBPBIN/sonox/node-sonos-http-api"
+API_DIR="$LBPBIN/sonox-pro/node-sonos-http-api"
 SERVICE_FILE="/etc/systemd/system/sonos-http-api.service"
-SETTINGS_FILE="$LBPDATA/sonox/settings.json"
+SETTINGS_FILE="$LBPDATA/sonox-pro/settings.json"
 
 echo "<INFO> Starting the setup of systemd service for the API..."
 
@@ -110,6 +111,21 @@ if [ "$USE_GLOBAL_NODE" = false ]; then
     fi
 fi
 
+
+ # Pull the latest changes from the API repo
+if [ -d "$API_DIR/.git" ]; then
+    echo "<INFO> Pulling latest changes from API Git repository..."
+    cd "$API_DIR"
+    git reset --hard HEAD
+    git pull --rebase --autostash
+    if [ $? -ne 0 ]; then
+        echo "<WARNING> Git pull failed in $API_DIR"
+    else
+        echo "<OK> Git pull successful."
+    fi
+else
+    echo "<WARNING> API directory is not a Git repository. Skipping git pull."
+fi
 
 # Prüfen, ob das API-Verzeichnis existiert
 if [ ! -d "$API_DIR" ]; then
@@ -191,5 +207,13 @@ if curl -sf --max-time 2 http://127.0.0.1:${API_PORT}/zones > /dev/null; then
 else
     echo "<WARNING> node-sonos-http-api is not responding. This might be due to port ${API_PORT} already being used."
     echo "<HINT> You can change the port in the plugin settings and save."
+fi
+
+echo "<INFO> Restarting sonos-http-api service..."
+systemctl restart sonos-http-api.service
+if [ $? -eq 0 ]; then
+    echo "<OK> sonos-http-api.service restarted successfully."
+else
+    echo "<ERROR> Failed to restart sonos-http-api.service."
 fi
 exit 0
