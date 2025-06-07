@@ -2,7 +2,7 @@
 
 ARGV0=$0    # Shell command itself
 ARGV1=$1    # Temp folder during install
-ARGV2=$2    # Plugin name (e.g., sonox-pro)
+ARGV2=$2    # Plugin name
 ARGV3=$3    # Plugin installation folder (same as plugin name)
 ARGV4=$4    # Plugin version
 ARGV5=$5    # Base folder of LoxBerry

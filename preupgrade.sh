@@ -2,12 +2,12 @@
 
 # Argumente vom LoxBerry-System
 ARGV1=$1 # Temp-Verzeichnisname z. B. install_abc123
-ARGV2=$2 # Plugin-DB-Key (sonox-pro)
-ARGV3=$3 # Plugin-Ordnername (sonox-pro)
+ARGV2=$2 # Plugin-DB-Key
+ARGV3=$3 # Plugin-Ordnername
 ARGV4=$4 # Aktuelle Version
 ARGV5=$5 # LoxBerry-Basisverzeichnis (/opt/loxberry)
 
-echo "<INFO> SonoX-Pro: Starte preupgrade.sh"
+echo "<INFO> SonoX: Starte preupgrade.sh"
 
 # Temporäres Backup-Verzeichnis
 TMPDIR="/tmp/${ARGV1}_upgrade"

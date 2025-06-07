@@ -10,14 +10,14 @@ fi
 if [ -f /etc/machine-id ]; then
     DEVICE_ID=$(cat /etc/machine-id | sha256sum | cut -c1-16)
     echo "<INFO> Using stable device ID based on /etc/machine-id: $DEVICE_ID"
-    echo "$DEVICE_ID" > "$LBPDATA/sonox-pro/device_id.txt"
+    echo "$DEVICE_ID" > "$LBPDATA/sonox/device_id.txt"
 
 
     FIREBASE_URL="https://sonox-db37a-default-rtdb.europe-west1.firebasedatabase.app/sonox-tracking/${DEVICE_ID}.json"
     TRACKING_DATA=$(cat <<EOF
 {
   "event": "plugin_installed",
-  "plugin_version": "1.1.2",
+  "plugin_version": "1.1.3",
   "plugin_name": "Sonox Pro",
   "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 }
@@ -32,9 +32,9 @@ else
 fi
 
 # Wichtige Variablen
-API_DIR="$LBPBIN/sonox-pro/node-sonos-http-api"
+API_DIR="$LBPBIN/sonox/node-sonos-http-api"
 SERVICE_FILE="/etc/systemd/system/sonos-http-api.service"
-SETTINGS_FILE="$LBPDATA/sonox-pro/settings.json"
+SETTINGS_FILE="$LBPDATA/sonox/settings.json"
 
 echo "<INFO> Starting the setup of systemd service for the API..."
 
