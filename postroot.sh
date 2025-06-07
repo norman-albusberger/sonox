@@ -18,7 +18,7 @@ if [ -f /etc/machine-id ]; then
 {
   "event": "plugin_installed",
   "plugin_version": "1.1.3",
-  "plugin_name": "Sonox Pro",
+  "plugin_name": "SonoX",
   "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 }
 EOF
