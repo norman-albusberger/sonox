@@ -17,7 +17,7 @@ if [ -f /etc/machine-id ]; then
     TRACKING_DATA=$(cat <<EOF
 {
   "event": "plugin_installed",
-  "plugin_version": "1.0.0",
+  "plugin_version": "1.1.2",
   "plugin_name": "Sonox Pro",
   "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 }
@@ -191,9 +191,16 @@ EOF
         echo "<ERROR> Error during creation and starting of the sonos-http-api.service."
         exit 1
     fi
-else
-    echo "<WARNING> systemd service sonos-http-api.service already exists."
 fi
+
+echo "<INFO> Restarting sonos-http-api service..."
+systemctl restart sonos-http-api.service
+if [ $? -eq 0 ]; then
+    echo "<OK> sonos-http-api.service restarted successfully."
+else
+    echo "<ERROR> Failed to restart sonos-http-api.service."
+fi
+
 
 echo "<INFO> Checking if API is reachable on port ${API_PORT}..."
 for i in {1..7}; do
@@ -209,11 +216,5 @@ else
     echo "<HINT> You can change the port in the plugin settings and save."
 fi
 
-echo "<INFO> Restarting sonos-http-api service..."
-systemctl restart sonos-http-api.service
-if [ $? -eq 0 ]; then
-    echo "<OK> sonos-http-api.service restarted successfully."
-else
-    echo "<ERROR> Failed to restart sonos-http-api.service."
-fi
+
 exit 0
