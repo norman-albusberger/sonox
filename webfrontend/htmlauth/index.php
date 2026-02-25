@@ -44,25 +44,63 @@ $mqttBroker = $mqttDetails['brokeraddress'];
 $index = 0;
 
 ?>
-<div style="border-radius: 16px; background: linear-gradient(135deg, #666681, #2b2b44); padding: 2rem; color: #ffffff; font-family: sans-serif; max-width: 800px; margin: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-    <h1 style="margin-top: 0; font-size: 2rem;">SonoX-Pro – The Smart Bridge Between Sonos and Loxone</h1>
-    <p style="font-size: 1.1rem; line-height: 1.6;">
-        Unlock the full potential of your smart home: control your Sonos speakers from your Loxone system with unmatched speed and flexibility. SonoX-Pro brings seamless integration and powerful tools.
-    </p>
 
-    <ul style="list-style-type: '✔ '; padding-left: 1.2rem; margin-bottom: 1.5rem;">
-        <li><strong>Built-in Preset Editor</strong> with instant preview and full control</li>
-        <li>Now Playing Sync via Loxone Text Inputs</li>
-        <li>Advanced Multiroom Synchronization</li>
-        <li>Priority Audio Routing (e.g. for alarms or doorbells)</li>
-        <li>Blazing Fast – designed for low-latency response</li>
-    </ul>
-    <p style="font-size: 1rem; font-style: italic; margin-top: -1rem; margin-bottom: 1.5rem;">
-        Combine it with ElevenLabs and let your smart home talk back – with stunningly realistic voices for Text-to-Speech.
-    </p>
-    <a href="https://sonox.net/" target="_blank" style="display: inline-block; padding: 0.75rem 1.5rem; background-color: #119a09; color: #fff; font-weight: bold; text-decoration: none; border-radius: 8px;">
-        Learn More & Get SonoX-Pro
-    </a>
+<?php
+// Remote banner embed (served by WordPress) to keep promo content controllable outside the plugin.
+// Security notes:
+// - Strict domain allowlist (sonox.net)
+// - HTTPS only
+// - iframe sandbox without allow-same-origin and without top-navigation
+// - referrerpolicy set to no-referrer
+
+// Updated banner base URL and path for new banner endpoint.
+$bannerBaseUrl = 'https://sonox.net';
+$bannerPath = '/sonox-pro-banner/';
+
+// Sanitize optional lang parameter (keep it simple: letters, numbers, dash).
+$lang = 'de';
+if (isset($_GET['lang'])) {
+    $candidate = (string)$_GET['lang'];
+    if (preg_match('/^[a-zA-Z0-9\-]{2,10}$/', $candidate)) {
+        $lang = $candidate;
+    }
+}
+
+// Some WordPress/security/caching setups return 404 when unknown query params are present on a page URL.
+// Therefore, we keep the iframe URL clean by default.
+// If you want to pass tracking/variant parameters, set this to true after confirming your WP setup accepts them.
+$enableBannerQueryParams = false;
+
+$bannerQuery = '';
+if ($enableBannerQueryParams) {
+    // Optional query parameters so WordPress can serve variants and you can track source.
+    $bannerQuery = http_build_query([
+        'product'      => 'sonox-free',
+        'page'         => 'index',
+        'lang'         => $lang,
+        'utm_source'   => 'loxberry',
+        'utm_medium'   => 'plugin',
+        'utm_campaign' => 'sonox-free-banner'
+    ]);
+}
+
+// Build the final URL for the iframe.
+$bannerSrc = $bannerBaseUrl . $bannerPath;
+if (!empty($bannerQuery)) {
+    $bannerSrc .= '?' . $bannerQuery;
+}
+?>
+
+<div class="sonox-remote-banner" style="max-width: 920px; margin: 16px auto;">
+    <iframe
+        src="<?= htmlspecialchars($bannerSrc, ENT_QUOTES, 'UTF-8') ?>"
+        title="SonoX-Pro Banner"
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        sandbox="allow-scripts allow-forms allow-popups"
+        style="width: 100%; border: 0; border-radius: 16px; min-height: 660px; overflow: hidden;">
+    </iframe>
+    <!-- Fallback: If iframe is blocked by network/CSP, show nothing (avoid broken UI). -->
 </div>
 
 <script>
