@@ -17,7 +17,7 @@ if [ -f /etc/machine-id ]; then
     TRACKING_DATA=$(cat <<EOF
 {
   "event": "plugin_installed",
-  "plugin_version": "1.1.4",
+  "plugin_version": "1.1.7",
   "plugin_name": "SonoX",
   "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 }
@@ -38,7 +38,12 @@ SETTINGS_FILE="$LBPDATA/sonox/settings.json"
 
 echo "<INFO> Starting the setup of systemd service for the API..."
 
-NODE_VERSION="22.2.0"
+# Muss zu den engines der API passen:
+#   package.json           : node >=22 <25, npm >=10
+#   vendor/sonos-discovery : node >=23 <25, npm >=10
+#   .nvmrc                 : 24
+# 24.x erfuellt beide, ist aktuelles LTS und identisch zur SonoX-Appliance.
+NODE_VERSION="24.16.0"
 
 # Architektur erkennen und Node.js-Build-Typ festlegen
 ARCH=$(uname -m)
@@ -61,31 +66,57 @@ esac
 NODE_DIR="$API_DIR/node"
 NODE_PATH=""
 
+# Akzeptierte System-Node-Versionen: 22..24 (siehe engines oben).
+# 22 laeuft nachweislich, erzeugt aber eine EBADENGINE-Warnung von
+# sonos-discovery (>=23) -> wird akzeptiert, aber mit Hinweis. Empfohlen: 24.
+NODE_MIN_MAJOR=22
+NODE_MAX_MAJOR=24
+
 # Check for global node binary
-GLOBAL_NODE=$(command -v node)
+GLOBAL_NODE=$(command -v node || true)
 USE_GLOBAL_NODE=false
 
 if [ -n "$GLOBAL_NODE" ]; then
-    GLOBAL_VERSION_RAW=$($GLOBAL_NODE -v | sed 's/^v//')
-    GLOBAL_MAJOR=$(echo "$GLOBAL_VERSION_RAW" | cut -d. -f1)
+    GLOBAL_VERSION_RAW=$("$GLOBAL_NODE" -v 2>/dev/null | sed 's/^v//')
+    GLOBAL_MAJOR=${GLOBAL_VERSION_RAW%%.*}
+    NPM_MAJOR=$(npm -v 2>/dev/null | cut -d. -f1)
 
-    if [ "$GLOBAL_MAJOR" -ge 14 ] && [ "$GLOBAL_MAJOR" -lt 22 ]; then
-        echo "<INFO> Found system Node.js v$GLOBAL_VERSION_RAW – accepted range (14 ≤ v < 22)."
+    # Nicht-numerische Werte abfangen, sonst bricht [ -ge ] mit
+    # "integer expression expected" ab.
+    case "$GLOBAL_MAJOR" in ''|*[!0-9]*) GLOBAL_MAJOR=-1 ;; esac
+    case "$NPM_MAJOR" in ''|*[!0-9]*) NPM_MAJOR=-1 ;; esac
+
+    if [ "$GLOBAL_MAJOR" -ge "$NODE_MIN_MAJOR" ] && [ "$GLOBAL_MAJOR" -le "$NODE_MAX_MAJOR" ] && [ "$NPM_MAJOR" -ge 10 ]; then
+        echo "<INFO> Found system Node.js v$GLOBAL_VERSION_RAW (npm $NPM_MAJOR) – accepted range ($NODE_MIN_MAJOR ≤ v ≤ $NODE_MAX_MAJOR)."
+        if [ "$GLOBAL_MAJOR" -lt 23 ]; then
+            echo "<WARNING> Node v$GLOBAL_VERSION_RAW is below the declared engine of sonos-discovery (>=23). It works, but v$NODE_VERSION is recommended."
+        fi
         NODE_PATH="$GLOBAL_NODE"
         USE_GLOBAL_NODE=true
     else
-        echo "<INFO> Found system Node.js v$GLOBAL_VERSION_RAW – not suitable. Will use local v$NODE_VERSION."
+        echo "<INFO> System Node.js v$GLOBAL_VERSION_RAW (npm $NPM_MAJOR) not suitable – requires node $NODE_MIN_MAJOR..$NODE_MAX_MAJOR with npm >= 10. Will use local v$NODE_VERSION."
     fi
 else
     echo "<INFO> No system Node.js found. Will use local v$NODE_VERSION."
 fi
 
 
-# Fallback: use local Node.js v22
+# Fallback: lokale Node.js-Installation in $NODE_DIR
 if [ "$USE_GLOBAL_NODE" = false ]; then
     NODE_PATH="$NODE_DIR/bin/node"
-    if [ ! -x "$NODE_PATH" ]; then
-        echo "<INFO> Node.js v$NODE_VERSION not found locally. Downloading..."
+    LOCAL_VERSION_RAW=""
+    if [ -x "$NODE_PATH" ]; then
+        LOCAL_VERSION_RAW=$("$NODE_PATH" -v 2>/dev/null | sed 's/^v//')
+    fi
+
+    # Nicht nur "existiert?", sondern "richtige Version?" - sonst wuerde ein Bump
+    # von NODE_VERSION bestehende Installationen nie aktualisieren.
+    if [ "$LOCAL_VERSION_RAW" != "$NODE_VERSION" ]; then
+        if [ -n "$LOCAL_VERSION_RAW" ]; then
+            echo "<INFO> Local Node.js is v$LOCAL_VERSION_RAW, but v$NODE_VERSION is required. Reinstalling..."
+        else
+            echo "<INFO> Node.js v$NODE_VERSION not found locally. Downloading..."
+        fi
 
         # Bereinige ggf. defekte oder unvollständige lokale Node.js-Installation
         if [ -d "$NODE_DIR" ]; then
