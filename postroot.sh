@@ -185,10 +185,13 @@ fi
 # Extrahiere den Port aus der settings.json
 API_PORT=$(jq -r '.port // 5005' "$SETTINGS_FILE")
 
-# Systemd-Dienst einrichten
-if [ ! -f "$SERVICE_FILE" ]; then
-    echo "<INFO> Creating systemd service for node-sonos-http-api..."
-    cat <<EOF > "$SERVICE_FILE"
+# Systemd-Dienst einrichten.
+# Die Unit wird bei JEDEM Lauf neu geschrieben, nicht nur beim Erstinstall:
+# NODE_PATH kann sich beim Upgrade aendern (z. B. System-Node wird jetzt
+# abgelehnt -> lokales Node). Eine einmalig geschriebene Unit wuerde sonst
+# weiterhin die alte Node-Binary starten und der Wechsel liefe ins Leere.
+echo "<INFO> Writing systemd service for node-sonos-http-api..."
+cat <<EOF > "$SERVICE_FILE"
 [Unit]
 Description=Sonos HTTP API
 After=network.target
@@ -199,7 +202,7 @@ Environment="SETTINGS_PATH=$SETTINGS_FILE"
 Environment="PATH=/usr/local/bin:/usr/bin:/bin"
 ExecStartPre=/usr/bin/test -f $SETTINGS_FILE
 ExecStart=$NODE_PATH $API_DIR/server.js
-ExecStop=/bin/kill $MAINPID
+ExecStop=/bin/kill \$MAINPID
 WorkingDirectory=$API_DIR
 Restart=always
 RestartSec=5
@@ -213,16 +216,12 @@ LimitNOFILE=8192
 [Install]
 WantedBy=multi-user.target
 EOF
-    systemctl daemon-reload
-    systemctl enable sonos-http-api.service
-    systemctl start sonos-http-api.service
-    if [ $? -eq 0 ]; then
-        echo "<OK> systemd service created successfully. sonos-http-api.service up and running."
-    else
-        echo "<ERROR> Error during creation and starting of the sonos-http-api.service."
-        exit 1
-    fi
+systemctl daemon-reload
+if ! systemctl enable sonos-http-api.service; then
+    echo "<ERROR> Failed to enable sonos-http-api.service."
+    exit 1
 fi
+echo "<OK> systemd service written. Node binary in use: $NODE_PATH"
 
 echo "<INFO> Restarting sonos-http-api service..."
 systemctl restart sonos-http-api.service

@@ -2,7 +2,7 @@
 
 # Important variables (provided by LoxBerry)
 API_DIR="$LBPBIN/sonox/node-sonos-http-api"
-REQUIRED_NODE_VERSION="14.0.0"
+# Die Node-Version wird ausschliesslich in postroot.sh bestimmt (Node 22..24).
 
 echo "<INFO> Starting preparation for the installation of the Sonox plugin..."
 
